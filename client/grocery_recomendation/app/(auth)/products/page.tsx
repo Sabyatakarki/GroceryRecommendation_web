@@ -49,9 +49,7 @@ export default function ProductsPage() {
       "Vegetables",
       "Dairy",
       "Grains",
-      "Protein",
       "Beverages",
-      "Snacks",
       "Nuts & Seeds"
     ];
     

@@ -150,9 +150,7 @@ export default function ProductDetailsPage() {
               
               {/* Product Typography Header */}
               <div className="space-y-2">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#f4f7f4] border border-[#e2eae0] rounded-full text-[10px] font-bold uppercase tracking-wider text-[#556b2f]">
-                  <Sparkles size={10} /> Verified Nutrition
-                </span>
+                
                 <p className="text-xs font-bold tracking-widest text-[#556b2f] uppercase">
                   {product.category || "Grocery Item"}
                 </p>
@@ -221,7 +219,7 @@ export default function ProductDetailsPage() {
                   className="inline-flex items-center gap-2 bg-[#556b2f] text-white px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-[#465927] shadow-sm transition"
                 >
                   <Sparkles size={14} />
-                  Evaluate Match Fit Profile
+                  View my recommendation history
                 </button>
               </div>
 
