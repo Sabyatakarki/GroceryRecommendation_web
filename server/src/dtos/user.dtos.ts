@@ -11,6 +11,9 @@ export interface LoginUserDto {
 
 export interface UpdateProfileDto {
   fullName?: string;
+
+  email?: string;
+
   profileImage?: string;
 
   age?: number;

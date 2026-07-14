@@ -65,29 +65,55 @@ class UserController {
 
   // Update User Profile
   async updateProfile(req: Request, res: Response) {
-    try {
-      const userId = Array.isArray(req.params.userId)
-        ? req.params.userId[0]
-        : req.params.userId;
+  try {
+    const userId = Array.isArray(req.params.userId)
+      ? req.params.userId[0]
+      : req.params.userId;
 
-      if (!userId) {
-        throw new Error("User ID is required.");
-      }
-
-      const user = await userService.updateProfile(userId, req.body);
-
-      return res.status(200).json({
-        success: true,
-        message: "Profile updated successfully.",
-        data: user,
-      });
-    } catch (error: any) {
-      return res.status(400).json({
-        success: false,
-        message: error.message,
-      });
+    if (!userId) {
+      throw new Error("User ID is required.");
     }
+
+    const body = { ...req.body };
+
+if (req.file) {
+  body.profileImage = req.file.filename;
+}
+
+    // Convert values coming from FormData
+    if (body.age) body.age = Number(body.age);
+    if (body.height) body.height = Number(body.height);
+    if (body.weight) body.weight = Number(body.weight);
+
+    // Convert comma separated values to arrays
+    if (body.allergies) {
+      body.allergies = body.allergies
+        .split(",")
+        .map((item: string) => item.trim())
+        .filter(Boolean);
+    }
+
+    if (body.healthConditions) {
+      body.healthConditions = body.healthConditions
+        .split(",")
+        .map((item: string) => item.trim())
+        .filter(Boolean);
+    }
+
+    const user = await userService.updateProfile(userId, body);
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully.",
+      data: user,
+    });
+  } catch (error: any) {
+    return res.status(400).json({
+      success: false,
+      message: error.message,
+    });
   }
+}
 }
 
 export default new UserController();

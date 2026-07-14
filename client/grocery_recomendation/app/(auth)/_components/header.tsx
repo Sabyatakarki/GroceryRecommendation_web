@@ -2,22 +2,27 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, ShoppingCart, User, Leaf } from "lucide-react";
+import { Search, User, Leaf } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function Header() {
   const pathname = usePathname();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+ useEffect(() => {
+  const token = localStorage.getItem("grocery_token");
+  setIsLoggedIn(!!token);
+}, []);
 
   const isActive = (path: string) => pathname === path;
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-[#e2eae0] bg-white/80 backdrop-blur-md transition-all duration-200">
-      
-      {/* Top Header Grid: Fluid side-to-side distribution */}
+      {/* Top Header */}
       <div className="w-full flex items-center justify-between px-6 sm:px-9 py-3.5 gap-4">
-
-        {/* 1. Left Corner: Logo & Branding */}
+        {/* Logo */}
         <Link href="/" className="flex items-center gap-3 shrink-0 group">
-          {/* Logo box matching the deep olive playcard background */}
           <div className="bg-[#556b2f] w-11 h-11 rounded-2xl flex items-center justify-center shadow-md shadow-stone-900/5 group-hover:scale-105 transition-transform duration-200">
             <Leaf className="text-white" size={22} />
           </div>
@@ -32,9 +37,13 @@ export default function Header() {
           </div>
         </Link>
 
-        {/* 2. Middle Center: Extended Premium Search Bar */}
+        {/* Search Bar */}
         <div className="hidden md:flex items-center relative flex-1 max-w-2xl mx-3 group">
-          <Search className="absolute left-4 text-stone-400 group-focus-within:text-[#556b2f] transition-colors duration-200" size={18} />
+          <Search
+            className="absolute left-4 text-stone-400 group-focus-within:text-[#556b2f] transition-colors duration-200"
+            size={18}
+          />
+
           <input
             type="text"
             placeholder="Search groceries, metrics, dietary alternatives..."
@@ -42,35 +51,24 @@ export default function Header() {
           />
         </div>
 
-        {/* 3. Right Corner: Action Controls */}
+        {/* Profile */}
         <div className="flex items-center gap-4 shrink-0">
-  {/* Shopping Cart */}
-  <button className="flex items-center gap-2 px-3 h-10 rounded-xl text-stone-600 hover:text-[#556b2f] hover:bg-stone-50 active:scale-95 transition-all duration-200 relative">
-    <div className="relative">
-      <ShoppingCart size={20} />
-      <span className="absolute -top-1 -right-1 w-2 h-2 bg-[#556b2f] rounded-full ring-2 ring-white" />
-    </div>
-    <span className="text-sm font-medium">Cart</span>
-  </button>
-
-  {/* User Profile */}
-  <Link
-    href="/login"
-    className="flex items-center gap-2 px-3 h-10 rounded-xl text-stone-600 hover:text-[#556b2f] hover:bg-stone-50 active:scale-95 transition-all duration-200"
-  >
-    <User size={20} />
-    <span className="text-sm font-medium">Profile</span>
-  </Link>
-</div>
-
+          <Link
+            href={isLoggedIn ? "/profile" : "/login"}
+            className="flex items-center gap-2 px-3 h-10 rounded-xl text-stone-600 hover:text-[#556b2f] hover:bg-stone-50 active:scale-95 transition-all duration-200"
+          >
+            <User size={20} />
+            <span className="text-sm font-medium">Profile</span>
+          </Link>
+        </div>
       </div>
 
-      {/* Modern Centered Sub-Navigation Menu */}
+      {/* Navigation */}
       <nav className="border-t border-stone-100 bg-stone-50/40">
         <div className="w-full flex justify-center items-center gap-7 py-1.5">
           {[
             { name: "Home", path: "/home" },
-            { name: "Shop", path: "/shop" },
+            { name: "Products", path: "/products" },
             { name: "Recommendations", path: "/recommendation" },
             { name: "About", path: "/about" },
           ].map((link) => (
@@ -78,17 +76,16 @@ export default function Header() {
               key={link.path}
               href={link.path}
               className={`relative px-4 py-1.5 text-sm tracking-tight rounded-xl transition-all duration-200 ${
-  isActive(link.path)
-    ? "font-bold text-[#556b2f] bg-[#f4f7f4] border border-[#ccd6c4] shadow-sm opacity-100"
-    : "font-medium text-stone-500 opacity-70 hover:opacity-100 hover:text-[#556b2f] hover:bg-stone-100/50"
-}`}
+                isActive(link.path)
+                  ? "font-bold text-[#556b2f] bg-[#f4f7f4] border border-[#ccd6c4] shadow-sm opacity-100"
+                  : "font-medium text-stone-500 opacity-70 hover:opacity-100 hover:text-[#556b2f] hover:bg-stone-100/50"
+              }`}
             >
               {link.name}
             </Link>
           ))}
         </div>
       </nav>
-
     </header>
   );
 }

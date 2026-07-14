@@ -40,25 +40,27 @@ export default function LoginForm() {
     try {
       setLoading(true);
 
-      const response = await axios.post(`${API_URL}/login`, {
-        email: formData.email,
-        password: formData.password,
-        rememberMe,
-      });
+  const response = await axios.post(`${API_URL}/login`, {
+  email: formData.email,
+  password: formData.password,
+  rememberMe,
+});
 
-      // Inline Success State
-      setUiStatus({
-        type: "success",
-        message: "Login successful! Redirecting to home page...",
-      });
+// Save token and user
+const { token, user } = response.data.data;
 
-      if (response.data.token) {
-        localStorage.setItem("token", response.data.token);
-      }
+localStorage.setItem("grocery_token", token);
+localStorage.setItem("user", JSON.stringify(user));
 
-      setTimeout(() => {
-        router.push("/");
-      }, 3000);
+// Inline Success State
+setUiStatus({
+  type: "success",
+  message: "Login successful! Redirecting to home page...",
+});
+
+setTimeout(() => {
+  router.push("/home");
+}, 3000);
 
     } catch (error: any) {
       // Inline Error State

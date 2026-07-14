@@ -26,61 +26,95 @@ export default function HomePage() {
       <Header />
 
       <main>
-            {/* ================= HERO SECTION (Warm, Soft Olive & Linen Gradient) ================= */}
-        <section className="relative overflow-hidden bg-gradient-to-b from-[#e1e9df] via-[#edf2eb] to-[#d9e5d4] pt-20 pb-20 md:pt-28 md:pb-28 border-b border-[#e2eae0]">
-          {/* Soft Veggie Olive Glow Accents */}
-          <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#808c73]/10 rounded-full blur-[120px] pointer-events-none" />
-          <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-amber-100/30 rounded-full blur-[120px] pointer-events-none" />
+       {/* ================= HERO SECTION (Modern Premium Minimalist Layout) ================= */}
+{/* ================= HERO SECTION (Warm Premium Olive & Linen Layout) ================= */}
+<section className="relative overflow-hidden bg-gradient-to-b from-[#e1e9df] via-[#edf2eb] to-[#d9e5d4] pt-24 pb-20 md:pt-32 md:pb-28 border-b border-[#e2eae0]">
+  {/* Soft Veggie Olive Glow Accents */}
+  <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#808c73]/10 rounded-full blur-[120px] pointer-events-none" />
+  <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-amber-100/30 rounded-full blur-[120px] pointer-events-none" />
 
-          <div className="max-w-7xl mx-auto px-6 grid md:grid-cols-2 gap-12 items-center relative z-10">
-            <div className="text-center md:text-left space-y-6">
-              <span className="inline-flex items-center gap-1.5 px-4 py-2 bg-white/90 border border-[#ccd6c4] rounded-full text-xs font-bold uppercase tracking-wider text-[#556b2f] backdrop-blur-sm shadow-sm">
-                <Sparkles size={12} className="text-[#6b8e23]" /> Personalized Nutrition
-              </span>
+  <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-12 gap-12 lg:gap-8 items-center relative z-10">
+    
+    {/* Left Column: Core Value Proposition */}
+    <div className="lg:col-span-6 text-center md:text-left space-y-6 max-w-2xl mx-auto lg:mx-0">
+      <span className="inline-flex items-center gap-1.5 px-4 py-2 bg-white/90 border border-[#ccd6c4] rounded-full text-xs font-bold uppercase tracking-wider text-[#556b2f] backdrop-blur-sm shadow-sm">
+        <Sparkles size={12} className="text-[#6b8e23]" /> Personalized Nutrition
+      </span>
 
-              <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight leading-[1.15] text-stone-900">
-                Eat Healthier. <br />
-                <span className="bg-gradient-to-r from-[#556b2f] via-[#6b8e23] to-[#8a9a5b] bg-clip-text text-transparent">
-                  Shop Smarter.
-                </span>
-              </h1>
+      <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15] text-stone-900">
+        Eat Healthier. <br />
+        <span className="bg-gradient-to-r from-[#556b2f] via-[#6b8e23] to-[#8a9a5b] bg-clip-text text-transparent">
+          Shop Smarter.
+        </span>
+      </h1>
 
-              <p className="text-lg text-stone-600 max-w-xl mx-auto md:mx-0 leading-relaxed font-medium">
-                Discover healthier grocery products tailored to your nutritional needs, dietary preferences, and personal health goals through our recommendation system.
-              </p>
+      <p className="text-lg text-stone-600 max-w-xl mx-auto md:mx-0 leading-relaxed font-medium">
+        Discover healthier grocery products tailored to your nutritional needs, dietary preferences, and personal health goals through our recommendation system.
+      </p>
 
-              <div className="pt-4 flex flex-col sm:flex-row justify-center md:justify-start gap-4">
-                <Link
-                  href="/register"
-                  className="group inline-flex items-center justify-center gap-2 bg-[#556b2f] hover:bg-[#485b28] text-white font-extrabold px-8 py-4 rounded-2xl shadow-md shadow-olive-900/10 active:scale-[0.99] transition duration-200"
-                >
-                  Get Started
-                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                </Link>
+      <div className="pt-4 flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+        <Link
+          href="/register"
+          className="group inline-flex items-center justify-center gap-2 bg-[#556b2f] hover:bg-[#485b28] text-white font-extrabold px-8 py-4 rounded-2xl shadow-md shadow-olive-900/10 active:scale-[0.99] transition duration-200"
+        >
+          Get Started
+          <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+        </Link>
 
-                <Link
-                  href="/login"
-                  className="inline-flex items-center justify-center font-bold border border-[#ccd6c4] bg-white/80 hover:bg-white text-stone-700 px-8 py-4 rounded-2xl shadow-sm active:scale-[0.99] transition duration-200"
-                >
-                  Login
-                </Link>
-              </div>
+        <Link
+          href="/login"
+          className="inline-flex items-center justify-center font-bold border border-[#ccd6c4] bg-white/80 hover:bg-white text-stone-700 px-8 py-4 rounded-2xl shadow-sm active:scale-[0.99] transition duration-200"
+        >
+          Login
+        </Link>
+      </div>
+    </div>
+
+    {/* Right Column: Premium Application UI Frame Mockup */}
+    <div className="lg:col-span-6 flex justify-center relative">
+      <div className="relative w-full max-w-[460px]">
+        
+        {/* Master Interface Frame using original canvas aesthetics */}
+        <div className="bg-white p-3.5 rounded-[44px] shadow-2xl border border-[#e2eae0] relative overflow-hidden group">
+          <div className="relative rounded-[34px] overflow-hidden bg-[#faf9f5]">
+            <Image
+              src="/heading.png"
+              alt="Healthy Grocery Selection Dashboard Interface"
+              width={440}
+              height={440}
+              className="w-full object-cover pointer-events-none select-none transition duration-500 group-hover:scale-[1.02]"
+              priority
+            />
+          </div>
+
+          {/* Floating Live Recommendation Micro-Widget */}
+          <div className="absolute top-8 -left-6 bg-white/95 backdrop-blur-sm border border-[#ccd6c4] p-4 rounded-2xl shadow-lg max-w-[190px] hidden sm:flex items-center gap-3 transition-all duration-300 hover:-translate-y-0.5">
+            <div className="w-9 h-9 rounded-xl bg-[#edf2eb] border border-[#e2eae0] flex items-center justify-center text-[#556b2f] shrink-0">
+              <ShieldCheck size={18} />
             </div>
-
-            <div className="flex justify-center relative">
-              <div className="relative bg-white p-3 rounded-[44px] shadow-xl border border-[#e2eae0] max-w-[440px]">
-                <Image
-                  src="/images/hero.png"
-                  alt="Healthy Grocery Selection"
-                  width={440}
-                  height={440}
-                  className="rounded-[34px] object-cover pointer-events-none select-none"
-                  priority
-                />
-              </div>
+            <div>
+              <p className="text-[10px] font-bold text-stone-400 uppercase tracking-wider">Product Match</p>
+              <h4 className="text-xs font-bold text-stone-800 leading-tight">98% Clean Rating</h4>
             </div>
           </div>
-        </section>
+
+          {/* Floating Health Metric Badge Widget */}
+          <div className="absolute bottom-8 -right-4 bg-[#556b2f] text-white p-4 rounded-2xl shadow-xl border border-[#485b28] max-w-[210px] hidden sm:block transition-all duration-300 hover:-translate-y-0.5">
+            <div className="flex items-center justify-between gap-4 mb-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-widest text-[#d9e5d4]">Dietary Targets</span>
+              <span className="w-2 h-2 rounded-full bg-amber-300 animate-pulse" />
+            </div>
+            <p className="text-xs text-[#f1f5f0]/90 leading-normal font-medium">
+              Optimized macros tailored for <span className="text-white font-bold">Optimal Longevity</span> parameters.
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
 
          {/* ================= CATEGORIES SECTION ================= */}
         <section className="bg-[#faf9f5] border-y border-[#e2eae0] py-24">

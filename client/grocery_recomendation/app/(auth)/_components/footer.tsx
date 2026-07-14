@@ -8,14 +8,15 @@ export default function Footer() {
       {/* Primary Brand & Information Grid */}
       <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
 
-        {/* Column 1: Logo & Mission Statement (Spans 4 columns for prominence) */}
+        {/* Column 1: Logo & Mission Statement */}
         <div className="md:col-span-4 space-y-5">
           <Link href="/" className="flex items-center gap-3 group w-max">
-            <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/10">
+            {/* Logo box matches your exact deep olive green */}
+            <div className="bg-[#556b2f] w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-[#556b2f]/10">
               <Leaf className="text-white" size={20} />
             </div>
             <h2 className="text-xl font-extrabold text-white tracking-tighter">
-              Healthy<span className="text-emerald-500">Grocery</span>
+              Healthy<span className="text-[#556b2f]">Grocery</span>
             </h2>
           </Link>
 
@@ -24,7 +25,7 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Column 2: Navigational Links (Spans 2 columns) */}
+        {/* Column 2: Navigational Links */}
         <div className="md:col-span-2 space-y-4">
           <h3 className="text-xs font-bold uppercase tracking-widest text-white">
             Navigation
@@ -39,7 +40,7 @@ export default function Footer() {
               <li key={idx}>
                 <Link 
                   href={link.href} 
-                  className="text-stone-400 hover:text-emerald-400 transition-colors duration-150 inline-flex items-center gap-0.5 group"
+                  className="text-stone-400 hover:text-[#556b2f] transition-colors duration-150 inline-flex items-center gap-0.5 group"
                 >
                   {link.label}
                   <ArrowUpRight size={12} className="opacity-0 group-hover:opacity-100 transition-all transform group-hover:translate-x-0.5" />
@@ -49,7 +50,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Column 3: Resource Links (Spans 3 columns) */}
+        {/* Column 3: Resource Links */}
         <div className="md:col-span-3 space-y-4">
           <h3 className="text-xs font-bold uppercase tracking-widest text-white">
             Healthy Resources
@@ -68,20 +69,20 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Column 4: Metadata & Academic Project Info (Spans 3 columns) */}
+        {/* Column 4: Metadata & Academic Project Info */}
         <div className="md:col-span-3 space-y-4">
           <h3 className="text-xs font-bold uppercase tracking-widest text-white">
             Project Matrix
           </h3>
           <div className="space-y-3.5 text-sm font-medium text-stone-400">
             <div className="flex items-center gap-2.5">
-              <MapPin size={16} className="text-emerald-500 shrink-0" />
+              <MapPin size={16} className="text-[#556b2f] shrink-0" />
               <span>Kathmandu, Nepal</span>
             </div>
 
             <div className="flex items-center gap-2.5">
-              <Mail size={16} className="text-emerald-500 shrink-0" />
-              <a href="mailto:support@healthygrocery.com" className="hover:text-emerald-400 transition-colors">
+              <Mail size={16} className="text-[#556b2f] shrink-0" />
+              <a href="mailto:support@healthygrocery.com" className="hover:text-[#556b2f] transition-colors">
                 support@healthygrocery.com
               </a>
             </div>
@@ -104,7 +105,7 @@ export default function Footer() {
 
           <div className="flex items-center gap-1.5 px-3 py-1 bg-stone-900 border border-stone-800/80 rounded-full">
             <span>Made with</span>
-            <Heart size={12} className="text-rose-500 fill-rose-500 animate-pulse" />
+            <Heart size={12} className="text-[#556b2f] fill-[#556b2f]" />
             <span className="text-stone-400">for healthier living</span>
           </div>
 
