@@ -1,4 +1,5 @@
 import dotenv from 'dotenv';
+import path from 'path';
 dotenv.config();
 
 export const CLIENT_URL: string = process.env.CLIENT_URL || 'http://localhost:3000';
@@ -18,3 +19,18 @@ export const PORT:number =
  //fallback to local mongodb if env is mmissing
 
  //applications level CONSTANTS
+
+ // Python venv interpreter used to run the ML recommendation script
+ export const PYTHON_PATH: string =
+ process.env.PYTHON_PATH ||
+ path.resolve(
+   __dirname,
+   "../../..",
+   ".venv",
+   process.platform === "win32" ? "Scripts/python.exe" : "bin/python3"
+ );
+
+ export const ML_RECOMMEND_SCRIPT: string = path.resolve(
+   __dirname,
+   "../../ml/recommend.py"
+ );

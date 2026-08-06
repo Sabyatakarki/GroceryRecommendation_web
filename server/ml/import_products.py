@@ -1,39 +1,76 @@
+import os
 import pandas as pd
 from pymongo import MongoClient
+from pymongo.errors import PyMongoError
+from dotenv import load_dotenv
 
-# -----------------------------
-# MongoDB Connection
-# -----------------------------
-client = MongoClient("mongodb://localhost:27017/")
 
-db = client["grocery_recommendation"]
+load_dotenv("../.env")
 
-collection = db["products"]
+MONGO_URI = os.getenv("MONGO_URI")
 
-# -----------------------------
-# Read CSV
-# -----------------------------
-df = pd.read_csv("dataset/cleaned_food_dataset.csv")
 
-print(f"Loaded {len(df)} products.")
+try:
+    print("========================================")
+    print("Connecting to MongoDB...")
+    print("========================================")
 
-# -----------------------------
-# Convert DataFrame to Dictionary
-# -----------------------------
-products = df.to_dict(orient="records")
+    # Connect to MongoDB (5-second timeout)
+    client = MongoClient(
+    MONGO_URI,
+    serverSelectionTimeoutMS=5000
+)
 
-# -----------------------------
-# Remove Existing Products
-# -----------------------------
-collection.delete_many({})
+    # Test connection
+    client.server_info()
 
-print("Old products deleted.")
+    print("✅ Connected to MongoDB")
 
-# -----------------------------
-# Insert New Products
-# -----------------------------
-collection.insert_many(products)
+    # Database
+    db = client["grocery_recommendation"]
 
-print(f"Successfully imported {len(products)} products!")
+    # Collection
+    collection = db["products"]
 
-print("Done.")
+    print("Database:", db.name)
+    print("Collection:", collection.name)
+
+    print("\n========================================")
+    print("Reading CSV...")
+    print("========================================")
+
+    # Read CSV
+    df = pd.read_csv("dataset/cleaned_food_dataset.csv")
+
+    print(f"✅ Loaded {len(df)} products.")
+
+    # Convert dataframe to list of dictionaries
+    products = df.to_dict(orient="records")
+
+    print("\n========================================")
+    print("Deleting old products...")
+    print("========================================")
+
+    result = collection.delete_many({})
+
+    print(f"✅ Deleted {result.deleted_count} old products.")
+
+    print("\n========================================")
+    print("Importing products...")
+    print("========================================")
+
+    result = collection.insert_many(products)
+
+    print(f"✅ Successfully imported {len(result.inserted_ids)} products!")
+
+    print("\n========================================")
+    print("IMPORT COMPLETED SUCCESSFULLY")
+    print("========================================")
+
+except PyMongoError as e:
+    print("\n❌ MongoDB Error:")
+    print(e)
+
+except Exception as e:
+    print("\n❌ General Error:")
+    print(e)

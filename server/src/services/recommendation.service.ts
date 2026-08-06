@@ -1,73 +1,74 @@
+import { execFile } from "child_process";
+import { promisify } from "util";
 import Product from "../models/product.model";
 import { RecommendationType } from "../types/recommendation.types";
+import { PYTHON_PATH, ML_RECOMMEND_SCRIPT } from "../config";
+
+const execFileAsync = promisify(execFile);
+
+const RESULT_LIMIT = 12;
+const CANDIDATE_POOL_SIZE = 50;
+
+interface MLRecommendation {
+  _id: string;
+  similarityScore: number;
+}
 
 class RecommendationService {
   async getRecommendations(data: RecommendationType) {
-    const {
-      goal,
-      diet,
-    } = data;
+    const { goal, diet } = data;
 
-    let query: any = {};
+    const ranked = await this.runMLRecommendation(goal);
 
-    // Recommendation based on user's goal
-    switch (goal) {
-      case "Weight Loss":
-        query = {
-          calories: { $lte: 200 },
-          fat: { $lte: 8 },
-        };
-        break;
+    const orderedIds = ranked.map((item) => item._id);
 
-      case "Weight Gain":
-        query = {
-          calories: { $gte: 250 },
-        };
-        break;
+    const products = await Product.find({ _id: { $in: orderedIds } });
+    const productById = new Map(
+      products.map((product) => [product._id.toString(), product])
+    );
 
-      case "Build Muscle":
-        query = {
-          protein: { $gte: 20 },
-        };
-        break;
+    let ordered = orderedIds
+      .map((id) => productById.get(id))
+      .filter(
+        (product): product is (typeof products)[number] => Boolean(product)
+      );
 
-      case "Maintain Weight":
-  query = {
-    calories: {
-      $gte: 50,
-      $lte: 300,
-    },
-  };
-  break;
-
-      case "Healthy Eating":
-        query = {};
-        break;
-    }
-
-    let products = await Product.find(query);
-
-    // Filter by dietary preference
+    // Dietary preference is a hard constraint applied on top of the
+    // nutrition-similarity ranking produced by the ML script.
     if (diet === "High Protein") {
-      products = products.filter((product) => product.protein >= 15);
+      ordered = ordered.filter((product) => product.protein >= 15);
     }
 
     if (diet === "Low Carb") {
-      products = products.filter((product) => product.carbohydrates <= 20);
+      ordered = ordered.filter((product) => product.carbohydrates <= 20);
     }
 
     if (diet === "Balanced Diet") {
-  products = products.filter(
-    (product) =>
-      product.calories <= 300 &&
-      product.fat <= 15
-  );
-}
+      ordered = ordered.filter(
+        (product) => product.calories <= 300 && product.fat <= 15
+      );
+    }
 
-    // Vegetarian and Vegan filtering can be added later
-    // once your Product model includes a dietaryType field.
+    return ordered.slice(0, RESULT_LIMIT);
+  }
 
-    return products;
+  private async runMLRecommendation(
+    goal: string
+  ): Promise<MLRecommendation[]> {
+    const payload = JSON.stringify({ goal, limit: CANDIDATE_POOL_SIZE });
+
+    const { stdout } = await execFileAsync(PYTHON_PATH, [
+      ML_RECOMMEND_SCRIPT,
+      payload,
+    ]);
+
+    const result = JSON.parse(stdout);
+
+    if (!result.success) {
+      throw new Error(result.error || "Failed to generate recommendations.");
+    }
+
+    return result.data as MLRecommendation[];
   }
 }
 
