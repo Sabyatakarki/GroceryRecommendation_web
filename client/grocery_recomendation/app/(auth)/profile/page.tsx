@@ -109,7 +109,7 @@ export default function ProfilePage() {
       });
 
       if (result.data.profileImage) {
-        setImagePreview(`http://localhost:5001/uploads/profiles/${result.data.profileImage}`);
+        setImagePreview(`http://localhost:5001/uploads/profile_pictures/${result.data.profileImage}`);
       }
 
       setLoading(false);
