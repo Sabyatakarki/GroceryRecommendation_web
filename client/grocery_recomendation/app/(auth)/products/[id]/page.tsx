@@ -2,22 +2,22 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import Header from "../../_components/header";
 import Footer from "../../_components/footer";
 import api from "@/lib/api/axios";
-import { getProductImageUrl, DEFAULT_PRODUCT_IMAGE } from "@/lib/utils";
 import {
-  Sparkles,
-  ChevronLeft, 
-  Activity, 
-  AlertTriangle,
+  ChevronLeft,
   Flame,
   Dumbbell,
   Wheat,
   Droplet,
   Leaf,
-  CheckCircle2,
-  Gauge
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+  Activity,
+  Heart
 } from "lucide-react";
 
 interface Product {
@@ -25,7 +25,6 @@ interface Product {
   name: string;
   description: string;
   category: string;
-  image: string;
   calories: number;
   protein: number;
   carbohydrates: number;
@@ -74,12 +73,15 @@ export default function ProductDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#faf9f5] flex flex-col justify-between">
+      <div className="min-h-screen bg-[#faf9f6] flex flex-col justify-between">
         <Header />
-        <div className="flex-1 flex flex-col items-center justify-center space-y-4">
-          <div className="w-12 h-12 border-4 border-[#556b2f] border-t-transparent rounded-full animate-spin" />
-          <p className="text-stone-500 font-bold tracking-wider text-xs uppercase">Loading nutrition index...</p>
-        </div>
+        <main className="max-w-6xl mx-auto w-full px-6 py-12 flex-1 animate-pulse space-y-6">
+          <div className="h-6 bg-stone-200/70 rounded w-1/4" />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="h-96 bg-stone-200/60 rounded-2xl" />
+            <div className="h-96 bg-stone-200/60 rounded-2xl" />
+          </div>
+        </main>
         <Footer />
       </div>
     );
@@ -87,207 +89,179 @@ export default function ProductDetailsPage() {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-[#faf9f5] flex flex-col justify-between">
+      <div className="min-h-screen bg-[#faf9f6] flex flex-col justify-between">
         <Header />
-        <div className="flex-1 flex flex-col items-center justify-center max-w-md mx-auto p-8 text-center">
-          <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl text-amber-600 mb-4">
-            <AlertTriangle size={32} />
+        <main className="flex-1 flex items-center justify-center px-6 py-16">
+          <div className="bg-white border border-stone-200 p-8 rounded-2xl max-w-md w-full text-center shadow-sm">
+            <h2 className="text-xl font-bold text-stone-900">Food Item Not Found</h2>
+            <p className="text-stone-500 text-sm mt-2">
+              We couldn't locate the nutrition details for this item.
+            </p>
           </div>
-          <h2 className="text-2xl font-extrabold text-stone-900 tracking-tight">Product Missing</h2>
-          <p className="text-stone-500 text-sm mt-2 leading-relaxed">
-            The target grocery profile could not be found. It may have been unmapped from our system indexes.
-          </p>
-          <button 
-            onClick={() => router.push("/products")}
-            className="mt-6 inline-flex items-center gap-2 px-5 py-2.5 bg-white border border-[#e2eae0] rounded-xl text-stone-700 font-bold text-sm shadow-sm hover:bg-stone-50 transition"
-          >
-            <ChevronLeft size={16} /> Return to Shop
-          </button>
-        </div>
+        </main>
         <Footer />
       </div>
     );
   }
 
-  const imageUrl = getProductImageUrl(product.image);
-
   return (
-    <div className="min-h-screen bg-[#faf9f5] flex flex-col justify-between">
+    <div className="min-h-screen bg-[#faf9f6] flex flex-col justify-between">
       <div>
         <Header />
 
-        <main className="max-w-7xl mx-auto px-6 py-10">
+        <main className="max-w-6xl mx-auto px-6 py-10 space-y-6">
 
-          {/* 3-Column Compact Grid Matrix */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          {/* MAIN HORIZONTAL SPLIT GRID (2 Equal-Height Columns on Large Screens) */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
             
-            {/* Column 1: Balanced Left Sidebar Container */}
-            <div className="lg:col-span-4 space-y-5">
-              {/* Image Frame */}
-              <div className="bg-white p-3 rounded-3xl shadow-sm border border-[#e2eae0]">
-                <div className="relative aspect-square w-full overflow-hidden rounded-2xl bg-stone-50">
-                  <img
-                    src={imageUrl}
-                    alt={product.name}
-                    onError={(e) => {
-                      e.currentTarget.onerror = null;
-                      e.currentTarget.src = DEFAULT_PRODUCT_IMAGE;
-                    }}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-102"
-                  />
-                </div>
-              </div>
-
-              {/* Dynamic Storage & Prep Quick Card (Fills up the empty white space beautifully) */}
-              <div className="bg-white border border-[#e2eae0]/70 rounded-2xl p-5 shadow-sm space-y-3.5">
-                <div className="flex items-center gap-1.5 text-[#556b2f] border-b border-stone-100 pb-2">
-                  <Leaf size={14} />
-                  <h3 className="text-[10px] font-bold uppercase tracking-widest text-stone-900">
-                    Sourcing & Freshness
-                  </h3>
-                </div>
-                
-                <div className="space-y-2.5 text-xs text-stone-600 font-medium">
-                  <div className="flex gap-2 items-start">
-                    <CheckCircle2 size={14} className="text-[#556b2f] shrink-0 mt-0.5" />
-                    <p>100% Organic, fresh whole food selection.</p>
-                  </div>
-                  <div className="flex gap-2 items-start">
-                    <CheckCircle2 size={14} className="text-[#556b2f] shrink-0 mt-0.5" />
-                    <p>Keep refrigerated inside a breathable bag for premium lifespan.</p>
-                  </div>
-                  <div className="flex gap-2 items-start">
-                    <CheckCircle2 size={14} className="text-[#556b2f] shrink-0 mt-0.5" />
-                    <p>Wash thoroughly under cool running water before food prep.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Column 2 & 3: Primary Data Layout Blocks */}
-            <div className="lg:col-span-8 space-y-6">
+            {/* LEFT COLUMN: Overview + Macros */}
+            <div className="space-y-6">
               
-              {/* Product Typography Header */}
-              <div className="space-y-2">
-                
-                <p className="text-xs font-bold tracking-widest text-[#556b2f] uppercase">
-                  {product.category || "Grocery Item"}
-                </p>
-                <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 tracking-tight">
-                  {product.name}
-                </h1>
-              </div>
+              {/* Product Overview Playcard Header */}
+              <div className="bg-white border border-stone-200/80 rounded-2xl p-6 shadow-sm">
+                <div className="flex items-start justify-between gap-4 border-b border-stone-100 pb-5">
+                  <div className="space-y-1">
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#556b2f]">
+                      Nutrition Facts Profile
+                    </span>
+                    <h1 className="text-2xl font-extrabold text-stone-900 tracking-tight">
+                      {product.name}
+                    </h1>
+                    <p className="text-stone-500 text-xs font-medium leading-relaxed max-w-sm">
+                      {product.description || "Nutritional details and health breakdown for standard serving size."}
+                    </p>
+                  </div>
 
-              {/* Description Snippet */}
-              <div className="bg-white border border-[#e2eae0]/60 rounded-2xl p-5 shadow-sm space-y-1.5">
-                <h3 className="text-[10px] font-bold uppercase tracking-widest text-stone-400">Product Overview</h3>
-                <p className="text-stone-600 leading-relaxed font-medium text-sm">
-                  {product.description || "No overview profile details attached to this product block yet."}
-                </p>
-              </div>
-
-              {/* Functional Nutrition Matrix */}
-              <div className="bg-white border border-[#e2eae0] rounded-2xl p-5 shadow-sm space-y-4">
-                <div className="flex items-center gap-2 text-[#556b2f] border-b border-stone-100 pb-2">
-                  <Activity size={16} />
-                  <h2 className="font-extrabold text-xs uppercase tracking-wider text-stone-900">
-                    Nutrition Facts <span className="text-stone-400 font-normal lowercase">(per serving)</span>
-                  </h2>
+                  {/* Playcard Health Score Badge */}
+                  <div className="shrink-0 bg-[#f4f7f4] border border-[#e2eae0] p-3 rounded-xl text-center min-w-[95px]">
+                    <span className="text-[9px] font-extrabold uppercase tracking-wider text-stone-500 block">
+                      Health Score
+                    </span>
+                    <div className="flex items-baseline justify-center gap-0.5 text-[#556b2f] mt-0.5">
+                      <span className="text-2xl font-black">{product.nutritionDensityScore ?? 0}</span>
+                      <span className="text-[10px] font-bold text-stone-400">/100</span>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <div className="pt-3.5 flex items-center justify-between text-xs text-stone-500 font-medium">
+                  <span className="flex items-center gap-1 text-stone-700 font-semibold">
+                    <ShieldCheck size={15} className="text-[#556b2f]" /> Quality Verified
+                  </span>
+                  <span className="flex items-center gap-1 text-stone-400">
+                    <Activity size={15} /> Serving Standardized
+                  </span>
+                </div>
+              </div>
+
+              {/* Macronutrient Grid */}
+              <div className="bg-white border border-stone-200/80 rounded-2xl p-6 shadow-sm space-y-4">
+                <div className="flex items-center justify-between border-b border-stone-100 pb-3">
+                  <div className="flex items-center gap-2">
+                    <Heart size={16} className="text-[#556b2f]" />
+                    <h2 className="text-xs font-extrabold uppercase tracking-wider text-stone-900">
+                      Macronutrient Breakdown
+                    </h2>
+                  </div>
+                  <span className="text-[11px] font-semibold text-stone-400">Per Serving</span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {[
-                    { label: "Calories", val: `${product.calories ?? 0} kcal`, icon: Flame, color: "bg-amber-50/70 border-amber-100 text-amber-800" },
-                    { label: "Protein", val: `${product.protein ?? 0} g`, icon: Dumbbell, color: "bg-indigo-50/70 border-indigo-100 text-indigo-800" },
-                    { label: "Carbohydrates", val: `${product.carbohydrates ?? 0} g`, icon: Wheat, color: "bg-sky-50/70 border-sky-100 text-sky-800" },
-                    { label: "Fat", val: `${product.fat ?? 0} g`, icon: Droplet, color: "bg-rose-50/70 border-rose-100 text-rose-800" },
-                    { label: "Fiber", val: `${product.fiber ?? 0} g`, icon: Activity, color: "bg-emerald-50/70 border-emerald-100 text-emerald-800" },
-                    { label: "Sugar", val: `${product.sugar ?? 0} g`, icon: Sparkles, color: "bg-pink-50/70 border-pink-100 text-pink-800" },
+                    { name: "Calories", desc: "Energy output", val: `${product.calories ?? 0}`, unit: "kcal", icon: Flame, accent: "border-l-amber-500 text-amber-600 bg-amber-50/30" },
+                    { name: "Protein", desc: "Muscle building", val: `${product.protein ?? 0}`, unit: "g", icon: Dumbbell, accent: "border-l-indigo-500 text-indigo-600 bg-indigo-50/30" },
+                    { name: "Carbohydrates", desc: "Body fuel", val: `${product.carbohydrates ?? 0}`, unit: "g", icon: Wheat, accent: "border-l-sky-500 text-sky-600 bg-sky-50/30" },
+                    { name: "Total Fats", desc: "Healthy fats", val: `${product.fat ?? 0}`, unit: "g", icon: Droplet, accent: "border-l-rose-500 text-rose-600 bg-rose-50/30" },
+                    { name: "Dietary Fiber", desc: "Digestion support", val: `${product.fiber ?? 0}`, unit: "g", icon: Leaf, accent: "border-l-emerald-500 text-emerald-600 bg-emerald-50/30" },
+                    { name: "Sugars", desc: "Natural sugars", val: `${product.sugar ?? 0}`, unit: "g", icon: Sparkles, accent: "border-l-purple-500 text-purple-600 bg-purple-50/30" },
                   ].map((macro, idx) => {
                     const Icon = macro.icon;
                     return (
-                      <div key={idx} className={`border rounded-xl p-3 flex flex-col justify-between gap-2.5 ${macro.color}`}>
-                        <div className="flex items-center justify-between opacity-70">
-                          <p className="text-[9px] font-bold uppercase tracking-wider">{macro.label}</p>
-                          <Icon size={12} />
+                      <div 
+                        key={idx}
+                        className={`border border-stone-200/80 border-l-4 ${macro.accent} rounded-xl p-3 flex items-center justify-between`}
+                      >
+                        <div className="space-y-0.5">
+                          <div className="flex items-center gap-1.5">
+                            <Icon size={14} />
+                            <span className="text-xs font-bold text-stone-900">{macro.name}</span>
+                          </div>
+                          <p className="text-[10px] text-stone-400 font-medium">{macro.desc}</p>
                         </div>
-                        <h4 className="text-base font-black tracking-tight">{macro.val}</h4>
+
+                        <div className="text-right">
+                          <span className="text-lg font-extrabold text-stone-900">{macro.val}</span>
+                          <span className="text-[10px] font-semibold text-stone-400 ml-0.5">{macro.unit}</span>
+                        </div>
                       </div>
                     );
                   })}
                 </div>
               </div>
 
-              {/* Micronutrient & Density Breakdown */}
-              <div className="bg-white border border-[#e2eae0] rounded-2xl p-5 shadow-sm space-y-4">
-                <div className="flex items-center justify-between border-b border-stone-100 pb-2">
-                  <div className="flex items-center gap-2 text-[#556b2f]">
-                    <Gauge size={16} />
-                    <h2 className="font-extrabold text-xs uppercase tracking-wider text-stone-900">
-                      Micronutrients & Density
-                    </h2>
-                  </div>
-                  <span className="text-[10px] font-bold text-stone-400">
-                    Nutrition Density:{" "}
-                    <span className="text-[#556b2f]">
-                      {product.nutritionDensityScore ?? 0}
-                    </span>
-                  </span>
-                </div>
+            </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2.5 text-xs">
+            {/* RIGHT COLUMN: Micronutrients + CTA Banner */}
+            <div className="space-y-6">
+
+              {/* Micronutrients Table */}
+              <div className="bg-white border border-stone-200/80 rounded-2xl p-6 shadow-sm space-y-4">
+                <h2 className="text-xs font-extrabold uppercase tracking-wider text-stone-900 border-b border-stone-100 pb-3">
+                  Essential Vitamins & Minerals
+                </h2>
+
+                <div className="grid grid-cols-2 gap-x-6 gap-y-2.5 text-xs">
                   {[
-                    { label: "Sodium", val: `${product.sodium ?? 0} mg` },
-                    { label: "Cholesterol", val: `${product.cholesterol ?? 0} mg` },
-                    { label: "Calcium", val: `${product.calcium ?? 0} mg` },
-                    { label: "Iron", val: `${product.iron ?? 0} mg` },
-                    { label: "Potassium", val: `${product.potassium ?? 0} mg` },
-                    { label: "Magnesium", val: `${product.magnesium ?? 0} mg` },
-                    { label: "Zinc", val: `${product.zinc ?? 0} mg` },
-                    { label: "Vitamin A", val: `${product.vitaminA ?? 0} mg` },
-                    { label: "Vitamin C", val: `${product.vitaminC ?? 0} mg` },
-                    { label: "Vitamin D", val: `${product.vitaminD ?? 0} mg` },
-                    { label: "Vitamin E", val: `${product.vitaminE ?? 0} mg` },
-                    { label: "Vitamin K", val: `${product.vitaminK ?? 0} mg` },
+                    { name: "Sodium", val: `${product.sodium ?? 0} mg` },
+                    { name: "Cholesterol", val: `${product.cholesterol ?? 0} mg` },
+                    { name: "Calcium", val: `${product.calcium ?? 0} mg` },
+                    { name: "Iron", val: `${product.iron ?? 0} mg` },
+                    { name: "Potassium", val: `${product.potassium ?? 0} mg` },
+                    { name: "Magnesium", val: `${product.magnesium ?? 0} mg` },
+                    { name: "Zinc", val: `${product.zinc ?? 0} mg` },
+                    { name: "Vitamin A", val: `${product.vitaminA ?? 0} mg` },
+                    { name: "Vitamin C", val: `${product.vitaminC ?? 0} mg` },
+                    { name: "Vitamin D", val: `${product.vitaminD ?? 0} mg` },
+                    { name: "Vitamin E", val: `${product.vitaminE ?? 0} mg` },
+                    { name: "Vitamin K", val: `${product.vitaminK ?? 0} mg` },
                   ].map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="flex justify-between border-b border-stone-100 pb-1.5"
+                    <div 
+                      key={idx} 
+                      className="flex items-center justify-between py-1.5 border-b border-stone-100/70"
                     >
-                      <span className="text-stone-400 font-semibold">{item.label}</span>
-                      <span className="text-stone-800 font-bold">{item.val}</span>
+                      <span className="text-stone-500 font-medium">{item.name}</span>
+                      <span className="font-extrabold text-stone-800">{item.val}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Dynamic Assessment CTA Callout */}
-              <div className="bg-[#f4f7f4] border border-[#e2eae0] rounded-2xl p-5 relative overflow-hidden group">
-                <div className="absolute right-0 top-0 translate-x-6 -translate-y-6 text-[#556b2f]/5 pointer-events-none transition-transform group-hover:scale-110 duration-500">
-                  <Sparkles size={100} />
+              {/* Compatibility CTA Banner */}
+              <div className="bg-stone-900 text-white rounded-2xl p-6 flex flex-col justify-between gap-4 shadow-sm">
+                <div className="space-y-1">
+                  <h3 className="font-extrabold text-base tracking-tight text-white">
+                    Check Diet Alignment
+                  </h3>
+                  <p className="text-stone-300 text-xs font-normal leading-relaxed">
+                    See how well <span className="text-white font-semibold">{product.name}</span> matches your personal nutrition goals and daily splits.
+                  </p>
                 </div>
 
-                <h3 className="font-extrabold text-stone-900 text-xs uppercase tracking-wide mb-2 flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 bg-[#556b2f] rounded-full inline-block" />
-                  Personalized Recommendation Engine
-                </h3>
-
-                <p className="text-stone-600 text-xs leading-relaxed font-medium mb-4 max-w-2xl">
-                  Wondering if <span className="font-bold text-[#556b2f]">{product.name}</span> matches your micro/macro balance profiles perfectly? Align your biometric targets instantly.
-                </p>
-
-                <button
-                  onClick={() => router.push("/recommendation")}
-                  className="inline-flex items-center gap-2 bg-[#556b2f] text-white px-4 py-2.5 rounded-xl text-xs font-bold hover:bg-[#465927] shadow-sm transition"
-                >
-                  <Sparkles size={14} />
-                  View my recommendation history
-                </button>
+                <div>
+                  <button
+                    onClick={() => router.push("/recommendation")}
+                    className="inline-flex items-center gap-2 bg-[#556b2f] hover:bg-[#475b27] text-white px-5 py-2.5 rounded-xl text-xs font-extrabold uppercase tracking-wider transition w-full justify-center shadow-sm"
+                  >
+                    <span>Run Diet Check</span>
+                    <ArrowRight size={14} />
+                  </button>
+                </div>
               </div>
 
             </div>
 
           </div>
+
         </main>
       </div>
 

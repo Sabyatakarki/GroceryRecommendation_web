@@ -5,7 +5,6 @@ import Link from "next/link";
 import Header from "../_components/header";
 import Footer from "../_components/footer";
 import api from "@/lib/api/axios";
-import { getProductImageUrl, DEFAULT_PRODUCT_IMAGE } from "@/lib/utils";
 import {
   Sparkles,
   Activity, 
@@ -22,7 +21,6 @@ interface Product {
   _id: string;
   name: string;
   description: string;
-  image: string;
   category: string;
   calories: number;
   protein: number;
@@ -47,49 +45,49 @@ export default function RecommendationPage() {
     allergies: "",
   });
 
-  useEffect(() => {
-  loadProfile();
-}, []);
-
-const loadProfile = async () => {
-  try {
-    const response = await api.get("/profile");
-
-    if (response.data.data) {
-      const profile = response.data.data;
-
-      setFormData({
-        age: profile.age,
-        gender: profile.gender,
-        height: profile.height,
-        weight: profile.weight,
-        goal: profile.goal,
-        diet: profile.diet,
-        allergies: profile.allergies.join(", "),
-      });
-
-      // Load latest saved recommendations
-      if (
-        profile.recommendationHistory &&
-        profile.recommendationHistory.length > 0
-      ) {
-        const latest =
-          profile.recommendationHistory[
-            profile.recommendationHistory.length - 1
-          ];
-
-        setRecommendations(latest.products);
-        setHasSearched(true);
-      }
-    }
-  } catch (error) {
-    console.log("No saved profile found.");
-  }
-};
-
   const [recommendations, setRecommendations] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+
+  useEffect(() => {
+    loadProfile();
+  }, []);
+
+  const loadProfile = async () => {
+    try {
+      const response = await api.get("/profile");
+
+      if (response.data.data) {
+        const profile = response.data.data;
+
+        setFormData({
+          age: profile.age,
+          gender: profile.gender,
+          height: profile.height,
+          weight: profile.weight,
+          goal: profile.goal,
+          diet: profile.diet,
+          allergies: profile.allergies ? profile.allergies.join(", ") : "",
+        });
+
+        // Load latest saved recommendations
+        if (
+          profile.recommendationHistory &&
+          profile.recommendationHistory.length > 0
+        ) {
+          const latest =
+            profile.recommendationHistory[
+              profile.recommendationHistory.length - 1
+            ];
+
+          setRecommendations(latest.products);
+          setHasSearched(true);
+        }
+      }
+    } catch (error) {
+      console.log("No saved profile found.");
+    }
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -107,16 +105,17 @@ const loadProfile = async () => {
 
     try {
       await api.put("/profile", {
-  age: Number(formData.age),
-  gender: formData.gender,
-  height: Number(formData.height),
-  weight: Number(formData.weight),
-  goal: formData.goal,
-  diet: formData.diet,
-  allergies: formData.allergies
-    ? formData.allergies.split(",").map((item) => item.trim())
-    : [],
-});
+        age: Number(formData.age),
+        gender: formData.gender,
+        height: Number(formData.height),
+        weight: Number(formData.weight),
+        goal: formData.goal,
+        diet: formData.diet,
+        allergies: formData.allergies
+          ? formData.allergies.split(",").map((item) => item.trim())
+          : [],
+      });
+
       const response = await api.post("/recommendations", {
         ...formData,
         age: Number(formData.age),
@@ -129,19 +128,19 @@ const loadProfile = async () => {
 
       setRecommendations(response.data.data || response.data);
 
-await loadProfile();
+      await loadProfile();
     } catch (error: any) {
-  console.log("FULL ERROR:", error);
+      console.log("FULL ERROR:", error);
 
-  if (error.response) {
-    console.log("Status:", error.response.status);
-    console.log("Data:", error.response.data);
+      if (error.response) {
+        console.log("Status:", error.response.status);
+        console.log("Data:", error.response.data);
 
-    alert(error.response.data.message);
-  } else {
-    alert(error.message);
-  }
-} finally {
+        alert(error.response.data.message);
+      } else {
+        alert(error.message);
+      }
+    } finally {
       setLoading(false);
     }
   };
@@ -314,10 +313,11 @@ await loadProfile();
                 /* Dynamic Loading State Skeleton Grid */
                 <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                   {[...Array(6)].map((_, idx) => (
-                    <div key={idx} className="bg-white border border-[#e2eae0] rounded-[20px] p-3 space-y-3 animate-pulse">
-                      <div className="bg-stone-200/60 aspect-[4/3] w-full rounded-xl" />
-                      <div className="h-3.5 bg-stone-200/60 rounded w-2/3" />
-                      <div className="h-14 bg-stone-100 rounded-lg w-full" />
+                    <div key={idx} className="bg-white border border-[#e2eae0] rounded-[20px] p-4 space-y-3 animate-pulse">
+                      <div className="h-4 bg-stone-200/60 rounded w-1/2" />
+                      <div className="h-4 bg-stone-200/60 rounded w-3/4" />
+                      <div className="h-8 bg-stone-100 rounded-lg w-full" />
+                      <div className="h-20 bg-stone-100 rounded-lg w-full" />
                       <div className="h-8 bg-stone-100 rounded-lg w-full" />
                     </div>
                   ))}
@@ -352,30 +352,15 @@ await loadProfile();
                     <h2 className="text-lg font-extrabold tracking-tight">Recommended Healthy Grocery Products For You</h2>
                   </div>
 
-                  {/* Enhanced 3-Column Grid for smaller items */}
+                  {/* Enhanced 3-Column Grid */}
                   <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {recommendations.map((product) => {
-                      const imageUrl = getProductImageUrl(product.image);
-
                       return (
                         <div
                           key={product._id}
-                          className="bg-white border border-[#e2eae0] rounded-[20px] p-3 flex flex-col justify-between shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"
+                          className="bg-white border border-[#e2eae0] rounded-[20px] p-4 flex flex-col justify-between shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 group"
                         >
                           <div>
-                            {/* Product Media Layout Window */}
-                            <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-stone-50 border border-stone-100 mb-3">
-                              <img
-                                src={imageUrl}
-                                alt={product.name}
-                                onError={(e) => {
-                                  e.currentTarget.onerror = null;
-                                  e.currentTarget.src = DEFAULT_PRODUCT_IMAGE;
-                                }}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                              />
-                            </div>
-
                             <div className="flex items-center justify-between gap-2">
                               <span className="text-[9px] font-extrabold tracking-wider text-[#556b2f] uppercase bg-[#f4f7f4] px-2 py-0.5 rounded">
                                 {product.category || "Grocery Pack"}
@@ -388,7 +373,7 @@ await loadProfile();
                               )}
                             </div>
 
-                            <h3 className="text-sm font-extrabold text-stone-900 tracking-tight mt-2 line-clamp-1">
+                            <h3 className="text-sm font-extrabold text-stone-900 tracking-tight mt-2.5 line-clamp-1">
                               {product.name}
                             </h3>
 
@@ -398,8 +383,8 @@ await loadProfile();
                               </p>
                             )}
 
-                            {/* Denser Micro Metrics Array Section */}
-                            <div className="grid grid-cols-2 gap-x-2 gap-y-1 mt-2.5 bg-[#faf9f5] p-2 rounded-lg border border-stone-100 text-[11px] font-bold text-stone-600">
+                            {/* Micro Metrics Array Section */}
+                            <div className="grid grid-cols-2 gap-x-2 gap-y-1 mt-3 bg-[#faf9f5] p-2 rounded-lg border border-stone-100 text-[11px] font-bold text-stone-600">
                               <div className="flex justify-between border-b border-stone-200/50 pb-1">
                                 <span className="text-stone-400 font-semibold">Cal</span>
                                 <span className="text-stone-800">{product.calories}k</span>
@@ -438,7 +423,7 @@ await loadProfile();
                           {/* Detail Navigation Action Core */}
                           <Link
                             href={`/products/${product._id}`}
-                            className="mt-3.5 w-full inline-flex items-center justify-center gap-1.5 bg-[#556b2f] hover:bg-[#485b28] text-white text-[11px] font-bold py-2 rounded-lg transition shadow-sm"
+                            className="mt-4 w-full inline-flex items-center justify-center gap-1.5 bg-[#556b2f] hover:bg-[#485b28] text-white text-[11px] font-bold py-2 rounded-lg transition shadow-sm"
                           >
                             <Eye size={12} /> View Nutritional Details
                           </Link>

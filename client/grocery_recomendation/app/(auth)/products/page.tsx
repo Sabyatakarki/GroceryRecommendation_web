@@ -5,15 +5,13 @@ import Link from "next/link";
 import Header from "../_components/header";
 import Footer from "../_components/footer";
 import api from "@/lib/api/axios";
-import { getProductImageUrl, DEFAULT_PRODUCT_IMAGE } from "@/lib/utils";
-import { Search, Sparkles, ShoppingBag, Eye, RotateCcw } from "lucide-react";
+import { Search, Sparkles, ShoppingBag, Eye, RotateCcw, Flame, Dumbbell, ChevronRight, Scale } from "lucide-react";
 
 interface Product {
   _id: string;
   name: string;
   description: string;
   category: string;
-  image: string;
   calories: number;
   protein: number;
   carbohydrates: number;
@@ -42,7 +40,6 @@ export default function ProductsPage() {
     }
   };
 
-  // Combines existing backend values with required grocery options to ensure everything renders properly
   const categories = useMemo(() => {
     const defaultCategories = [
       "All",
@@ -51,16 +48,14 @@ export default function ProductsPage() {
       "Dairy",
       "Grains",
       "Beverages",
-      "Nuts & Seeds"
+      "Nuts & Seeds",
     ];
-    
+
     const incomingCategories = products.map((p) => p.category).filter(Boolean);
-    
-    // Merge everything together, maintaining proper formatting
-    const merged = [...defaultCategories, ...incomingCategories].map(cat => 
+    const merged = [...defaultCategories, ...incomingCategories].map((cat) =>
       cat.trim()
     );
-    
+
     return Array.from(new Set(merged));
   }, [products]);
 
@@ -70,7 +65,7 @@ export default function ProductsPage() {
       .includes(search.toLowerCase());
 
     const matchesCategory =
-      category === "All" || 
+      category === "All" ||
       (product.category || "").toLowerCase() === category.toLowerCase();
 
     return matchesSearch && matchesCategory;
@@ -82,137 +77,168 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#faf9f5] flex flex-col justify-between">
+    <div className="min-h-screen bg-[#faf9f5] flex flex-col justify-between selection:bg-[#556b2f] selection:text-white">
       <div>
         <Header />
 
-        <main className="max-w-7xl mx-auto px-6 py-12">
-          
-          {/* Header Description Section */}
-          <section className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-8 border-b border-[#e2eae0] mb-10">
-            <div className="space-y-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#f4f7f4] border border-[#e2eae0] rounded-full text-xs font-bold uppercase tracking-wider text-[#556b2f]">
-                <Sparkles size={12} /> Nutrition Metrics Index
-              </span>
-              <h1 className="text-4xl font-extrabold text-stone-900 tracking-tight">
-                Healthy Products
-              </h1>
-              <p className="text-stone-600 font-medium max-w-2xl leading-relaxed">
-                Browse healthy grocery products and explore their nutrition information. Compare macro thresholds to fine-tune your grocery habits.
-              </p>
+        <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+          {/* Header Banner */}
+          <section className="relative overflow-hidden bg-gradient-to-b from-[#f3f6f1] to-transparent p-6 sm:p-8 rounded-3xl border border-[#e2eae0]/80 mb-8 sm:mb-10">
+            <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 relative z-10">
+              <div className="space-y-3 max-w-2xl">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white/80 backdrop-blur-md border border-[#e2eae0] rounded-full text-xs font-bold uppercase tracking-wider text-[#556b2f] shadow-xs">
+                  <Sparkles size={13} className="animate-pulse" /> Nutrition Index
+                </span>
+                <h1 className="text-3xl sm:text-5xl font-black text-stone-900 tracking-tight leading-tight">
+                  Healthy Products
+                </h1>
+                <p className="text-stone-600 font-medium leading-relaxed text-sm sm:text-base">
+                  Browse healthy grocery products and explore their nutrition metrics. Compare macro thresholds to fine-tune your nutrition habits.
+                </p>
+              </div>
+
+              {/* Counter Badge */}
+              <div className="inline-flex items-center gap-2 self-start lg:self-auto px-4 py-2.5 bg-white rounded-2xl border border-[#e2eae0] shadow-xs text-xs font-bold text-stone-700">
+                <span className="w-2 h-2 rounded-full bg-[#556b2f] animate-ping" />
+                Showing <span className="text-[#556b2f] text-sm">{filteredProducts.length}</span> Items
+              </div>
             </div>
           </section>
 
-          {/* Search Input */}
-          <div className="relative max-w-xl mb-8 group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-[#556b2f] transition-colors duration-200" size={18} />
-            <input
-              type="text"
-              placeholder="Search by specific grocery item names..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-white border border-[#e2eae0] rounded-2xl pl-11 pr-5 py-3.5 text-sm text-stone-900 placeholder-stone-400 outline-none focus:border-[#556b2f] focus:ring-4 focus:ring-[#556b2f]/5 shadow-sm transition-all duration-200"
-            />
-          </div>
+          {/* Search & Category Filter Section */}
+          <div className="space-y-4 mb-8">
+            <div className="relative max-w-xl group">
+              <Search
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400 group-focus-within:text-[#556b2f] transition-colors duration-200"
+                size={18}
+              />
+              <input
+                type="text"
+                placeholder="Search by grocery item name..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-white border border-[#e2eae0] rounded-2xl pl-11 pr-10 py-3.5 text-sm text-stone-900 placeholder-stone-400 outline-none focus:border-[#556b2f] focus:ring-4 focus:ring-[#556b2f]/10 shadow-xs transition-all duration-200"
+              />
+              {search && (
+                <button
+                  onClick={() => setSearch("")}
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-stone-400 hover:text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-full w-5 h-5 flex items-center justify-center transition-colors"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
 
-          {/* Complete Category Horizontal Tubes Grid */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-6 scrollbar-hide mb-6">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setCategory(cat)}
-                className={`px-5 py-2 rounded-xl text-sm font-bold tracking-tight transition-all shrink-0 border capitalize ${
-                  category.toLowerCase() === cat.toLowerCase()
-                    ? "bg-[#556b2f] border-[#485b28] text-white shadow-md shadow-[#556b2f]/10"
-                    : "bg-white border-[#e2eae0] text-stone-600 hover:text-stone-900 hover:bg-stone-50"
-                }`}
+            {/* Scrollbar-Free Category Pill Controls */}
+            <div className="relative">
+              <div
+                className="flex items-center gap-2 overflow-x-auto py-2 scrollbar-none [ms-overflow-style:none] [scrollbar-width:none]"
+                style={{ WebkitOverflowScrolling: "touch" }}
               >
-                {cat}
-              </button>
-            ))}
+                {categories.map((cat) => {
+                  const isActive = category.toLowerCase() === cat.toLowerCase();
+                  return (
+                    <button
+                      key={cat}
+                      onClick={() => setCategory(cat)}
+                      className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold tracking-tight transition-all duration-200 shrink-0 border capitalize ${
+                        isActive
+                          ? "bg-[#556b2f] border-[#485b28] text-white shadow-md shadow-[#556b2f]/20 scale-[1.02]"
+                          : "bg-white border-[#e2eae0] text-stone-600 hover:text-stone-900 hover:bg-stone-50 hover:border-stone-300"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
           </div>
 
-          {/* Dynamic Content Results Grid */}
+          {/* Product Grid Layout */}
           {loading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {[...Array(8)].map((_, idx) => (
-                <div key={idx} className="bg-white border border-[#e2eae0] rounded-[24px] p-4 space-y-4 animate-pulse">
-                  <div className="bg-stone-200/60 aspect-square w-full rounded-2xl" />
-                  <div className="h-4 bg-stone-200/60 rounded-md w-2/3" />
-                  <div className="h-3 bg-stone-200/60 rounded-md w-full" />
-                  <div className="h-10 bg-stone-100 rounded-xl w-full pt-2" />
+                <div
+                  key={idx}
+                  className="bg-white border border-[#e2eae0] rounded-2xl p-5 space-y-4 animate-pulse"
+                >
+                  <div className="h-3 bg-stone-200/80 rounded-md w-1/4" />
+                  <div className="h-5 bg-stone-200/80 rounded-md w-3/4" />
+                  <div className="h-12 bg-stone-100 rounded-xl w-full" />
+                  <div className="h-9 bg-stone-100 rounded-xl w-full" />
                 </div>
               ))}
             </div>
           ) : filteredProducts.length === 0 ? (
-            <div className="text-center py-20 bg-white border border-[#e2eae0] border-dashed rounded-[32px] max-w-lg mx-auto p-8 shadow-sm">
-              <div className="bg-[#f4f7f4] w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                <ShoppingBag className="text-[#556b2f]" size={26} />
+            <div className="text-center py-16 sm:py-20 bg-white border border-[#e2eae0] border-dashed rounded-3xl max-w-md mx-auto p-8 shadow-xs">
+              <div className="bg-[#f4f7f4] w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 text-[#556b2f]">
+                <ShoppingBag size={28} />
               </div>
-              <h2 className="text-xl font-bold text-stone-900">No Products Available</h2>
-              <p className="text-stone-500 text-sm mt-1.5 max-w-xs mx-auto mb-5">
-                We couldn't locate any items registered under "{category}". Switch categories or clear filters to reset.
+              <h2 className="text-lg font-bold text-stone-900">No Products Found</h2>
+              <p className="text-stone-500 text-xs sm:text-sm mt-1.5 max-w-xs mx-auto mb-6">
+                We couldn't locate any items matching your active query under "{category}".
               </p>
               <button
                 onClick={handleResetFilters}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-[#556b2f] text-white text-xs font-bold rounded-xl hover:bg-[#485b28] transition"
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#556b2f] text-white text-xs font-bold rounded-xl hover:bg-[#485b28] transition shadow-md shadow-[#556b2f]/15"
               >
-                <RotateCcw size={14} /> View All Groceries
+                <RotateCcw size={14} /> Clear All Filters
               </button>
             </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-in fade-in duration-300">
-              {filteredProducts.map((product) => {
-                const imageUrl = getProductImageUrl(product.image);
-
-                return (
-                  <div
-                    key={product._id}
-                    className="bg-white border border-[#e2eae0] rounded-[24px] p-4 flex flex-col justify-between shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group"
-                  >
-                    <div>
-                      <div className="relative aspect-square w-full overflow-hidden rounded-xl bg-stone-50 border border-stone-100 mb-4">
-                        <img
-                          src={imageUrl}
-                          alt={product.name}
-                          onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src = DEFAULT_PRODUCT_IMAGE;
-                          }}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      </div>
-
-                      <span className="text-[11px] font-extrabold tracking-wider text-[#556b2f] uppercase bg-[#f4f7f4] px-2.5 py-1 rounded-md">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {filteredProducts.map((product) => (
+                <Link
+                  key={product._id}
+                  href={`/products/${product._id}`}
+                  className="bg-white border border-[#e2eae0] rounded-2xl p-5 flex flex-col justify-between shadow-xs hover:shadow-xl hover:-translate-y-1 hover:border-[#556b2f]/40 transition-all duration-300 group"
+                >
+                  <div>
+                    {/* Header: Category Badge */}
+                    <div className="flex items-center justify-between mb-2.5">
+                      <span className="text-[10px] font-extrabold tracking-wider text-[#556b2f] uppercase bg-[#f4f7f4] px-2.5 py-1 rounded-md border border-[#e2eae0]">
                         {product.category || "Grocery"}
                       </span>
+                    </div>
 
-                      <h2 className="text-lg font-extrabold text-stone-900 tracking-tight mt-3 line-clamp-1">
-                        {product.name}
-                      </h2>
+                    {/* Product Title */}
+                    <h2 className="text-base font-extrabold text-stone-900 tracking-tight group-hover:text-[#556b2f] transition-colors line-clamp-1 mb-4">
+                      {product.name}
+                    </h2>
 
-                      <div className="grid grid-cols-2 gap-2 mt-3 bg-[#faf9f5] p-2.5 rounded-xl border border-stone-100 text-xs font-semibold text-stone-600">
-                        <div className="flex flex-col">
-                          <span className="text-[10px] uppercase text-stone-400 font-bold">Energy</span>
-                          <span className="text-stone-800 font-bold">{product.calories ?? 0} kcal</span>
+                    {/* Nutrition Stats Panel */}
+                    <div className="grid grid-cols-2 gap-2 bg-[#faf9f5] p-3 rounded-xl border border-stone-100 mb-5">
+                      <div className="flex items-center gap-2">
+                        <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-600">
+                          <Flame size={14} />
                         </div>
-                        <div className="flex flex-col">
-                          <span className="text-[10px] uppercase text-stone-400 font-bold">Protein</span>
-                          <span className="text-[#556b2f] font-bold">{product.protein ?? 0}g</span>
+                        <div>
+                          <p className="text-[10px] font-bold text-stone-400 uppercase tracking-tight">Energy</p>
+                          <p className="text-xs font-extrabold text-stone-800">{product.calories ?? 0} kcal</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2">
+                        <div className="p-1.5 rounded-lg bg-[#556b2f]/10 text-[#556b2f]">
+                          <Dumbbell size={14} />
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-bold text-stone-400 uppercase tracking-tight">Protein</p>
+                          <p className="text-xs font-extrabold text-stone-800">{product.protein ?? 0}g</p>
                         </div>
                       </div>
                     </div>
-
-                    <Link
-                      href={`/products/${product._id}`}
-                      className="mt-4 w-full inline-flex items-center justify-center gap-2 bg-[#556b2f] hover:bg-[#485b28] text-white text-xs font-bold py-3 rounded-xl shadow-sm transition"
-                    >
-                      <Eye size={14} />
-                      View Nutrition Details
-                    </Link>
                   </div>
-                );
-              })}
+
+                  {/* View Details Action Link */}
+                  <span className="w-full inline-flex items-center justify-center gap-1.5 bg-[#f4f7f4] group-hover:bg-[#556b2f] text-stone-700 group-hover:text-white text-xs font-bold py-2.5 rounded-xl border border-[#e2eae0] group-hover:border-[#556b2f] transition-all duration-300">
+                    <Eye size={13} />
+                    View Details
+                    <ChevronRight size={13} className="opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all" />
+                  </span>
+                </Link>
+              ))}
             </div>
           )}
         </main>

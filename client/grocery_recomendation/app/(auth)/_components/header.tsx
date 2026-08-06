@@ -148,7 +148,9 @@ export default function Header() {
             className="flex items-center gap-2 px-3 h-10 rounded-xl text-stone-600 hover:text-[#556b2f] hover:bg-stone-50 active:scale-95 transition-all duration-200"
           >
             <User size={20} />
-            <span className="text-sm font-medium">Profile</span>
+            <span className="text-sm font-medium">
+              {isLoggedIn ? "Profile" : "Login"}
+            </span>
           </Link>
         </div>
       </div>
