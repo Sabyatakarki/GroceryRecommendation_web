@@ -99,7 +99,7 @@ export default function ProductsPage() {
 
               {/* Counter Badge */}
               <div className="inline-flex items-center gap-2 self-start lg:self-auto px-4 py-2.5 bg-white rounded-2xl border border-[#e2eae0] shadow-xs text-xs font-bold text-stone-700">
-                <span className="w-2 h-2 rounded-full bg-[#556b2f] animate-ping" />
+                <span className="w-2 h-2 rounded-full bg-[#556b2f]" />
                 Showing <span className="text-[#556b2f] text-sm">{filteredProducts.length}</span> Items
               </div>
             </div>
