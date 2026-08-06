@@ -5,15 +5,18 @@ export interface IProduct extends Document {
   description: string;
   category: string;
   image?: string;
+
   calories: number;
   protein: number;
   carbohydrates: number;
   fat: number;
   fiber: number;
   sugar: number;
+
+  nutritionDensityScore: number;
+  sodium: number;
+  cholesterol: number;
 }
-
-
 
 const productSchema = new Schema<IProduct>(
   {
@@ -67,17 +70,27 @@ const productSchema = new Schema<IProduct>(
       type: Number,
       required: true,
     },
-    
+
+    nutritionDensityScore: {
+      type: Number,
+      required: true,
+    },
+
+    sodium: {
+      type: Number,
+      required: true,
+    },
+
+    cholesterol: {
+      type: Number,
+      required: true,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-
-
 const Product = mongoose.model<IProduct>("Product", productSchema);
-
-
 
 export default Product;
