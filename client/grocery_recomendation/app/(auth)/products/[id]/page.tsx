@@ -5,8 +5,9 @@ import { useParams, useRouter } from "next/navigation";
 import Header from "../../_components/header";
 import Footer from "../../_components/footer";
 import api from "@/lib/api/axios";
-import { 
-  Sparkles, 
+import { getProductImageUrl, DEFAULT_PRODUCT_IMAGE } from "@/lib/utils";
+import {
+  Sparkles,
   ChevronLeft, 
   Activity, 
   AlertTriangle,
@@ -15,7 +16,8 @@ import {
   Wheat,
   Droplet,
   Leaf,
-  CheckCircle2
+  CheckCircle2,
+  Gauge
 } from "lucide-react";
 
 interface Product {
@@ -30,6 +32,19 @@ interface Product {
   fat: number;
   fiber: number;
   sugar: number;
+  nutritionDensityScore: number;
+  sodium: number;
+  cholesterol: number;
+  calcium: number;
+  iron: number;
+  potassium: number;
+  magnesium: number;
+  zinc: number;
+  vitaminA: number;
+  vitaminC: number;
+  vitaminD: number;
+  vitaminE: number;
+  vitaminK: number;
 }
 
 export default function ProductDetailsPage() {
@@ -94,7 +109,7 @@ export default function ProductDetailsPage() {
     );
   }
 
-  const imageUrl = `http://localhost:5001/uploads/products/${product.image}`;
+  const imageUrl = getProductImageUrl(product.image);
 
   return (
     <div className="min-h-screen bg-[#faf9f5] flex flex-col justify-between">
@@ -114,6 +129,10 @@ export default function ProductDetailsPage() {
                   <img
                     src={imageUrl}
                     alt={product.name}
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = DEFAULT_PRODUCT_IMAGE;
+                    }}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-102"
                   />
                 </div>
@@ -196,6 +215,49 @@ export default function ProductDetailsPage() {
                       </div>
                     );
                   })}
+                </div>
+              </div>
+
+              {/* Micronutrient & Density Breakdown */}
+              <div className="bg-white border border-[#e2eae0] rounded-2xl p-5 shadow-sm space-y-4">
+                <div className="flex items-center justify-between border-b border-stone-100 pb-2">
+                  <div className="flex items-center gap-2 text-[#556b2f]">
+                    <Gauge size={16} />
+                    <h2 className="font-extrabold text-xs uppercase tracking-wider text-stone-900">
+                      Micronutrients & Density
+                    </h2>
+                  </div>
+                  <span className="text-[10px] font-bold text-stone-400">
+                    Nutrition Density:{" "}
+                    <span className="text-[#556b2f]">
+                      {product.nutritionDensityScore ?? 0}
+                    </span>
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2.5 text-xs">
+                  {[
+                    { label: "Sodium", val: `${product.sodium ?? 0} mg` },
+                    { label: "Cholesterol", val: `${product.cholesterol ?? 0} mg` },
+                    { label: "Calcium", val: `${product.calcium ?? 0} mg` },
+                    { label: "Iron", val: `${product.iron ?? 0} mg` },
+                    { label: "Potassium", val: `${product.potassium ?? 0} mg` },
+                    { label: "Magnesium", val: `${product.magnesium ?? 0} mg` },
+                    { label: "Zinc", val: `${product.zinc ?? 0} mg` },
+                    { label: "Vitamin A", val: `${product.vitaminA ?? 0} mg` },
+                    { label: "Vitamin C", val: `${product.vitaminC ?? 0} mg` },
+                    { label: "Vitamin D", val: `${product.vitaminD ?? 0} mg` },
+                    { label: "Vitamin E", val: `${product.vitaminE ?? 0} mg` },
+                    { label: "Vitamin K", val: `${product.vitaminK ?? 0} mg` },
+                  ].map((item, idx) => (
+                    <div
+                      key={idx}
+                      className="flex justify-between border-b border-stone-100 pb-1.5"
+                    >
+                      <span className="text-stone-400 font-semibold">{item.label}</span>
+                      <span className="text-stone-800 font-bold">{item.val}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
 

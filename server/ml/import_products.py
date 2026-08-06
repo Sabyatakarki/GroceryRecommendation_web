@@ -42,6 +42,15 @@ try:
     # Read CSV
     df = pd.read_csv("dataset/cleaned_food_dataset.csv")
 
+    # Empty cells (e.g. the placeholder "image" column) are read back as
+    # NaN, which Mongoose later casts to the literal string "NaN" since
+    # the schema field is typed as String. Normalize before inserting.
+    numeric_columns = df.select_dtypes(include="number").columns
+    df[numeric_columns] = df[numeric_columns].fillna(0)
+
+    text_columns = df.select_dtypes(include="object").columns
+    df[text_columns] = df[text_columns].fillna("")
+
     print(f"✅ Loaded {len(df)} products.")
 
     # Convert dataframe to list of dictionaries

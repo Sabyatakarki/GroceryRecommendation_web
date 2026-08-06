@@ -5,6 +5,7 @@ import Link from "next/link";
 import Header from "../_components/header";
 import Footer from "../_components/footer";
 import api from "@/lib/api/axios";
+import { getProductImageUrl, DEFAULT_PRODUCT_IMAGE } from "@/lib/utils";
 import { Search, Sparkles, ShoppingBag, Eye, RotateCcw } from "lucide-react";
 
 interface Product {
@@ -162,7 +163,7 @@ export default function ProductsPage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-in fade-in duration-300">
               {filteredProducts.map((product) => {
-                const imageUrl = `http://localhost:5001/uploads/products/${product.image}`;
+                const imageUrl = getProductImageUrl(product.image);
 
                 return (
                   <div
@@ -174,6 +175,10 @@ export default function ProductsPage() {
                         <img
                           src={imageUrl}
                           alt={product.name}
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = DEFAULT_PRODUCT_IMAGE;
+                          }}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                         />
                       </div>

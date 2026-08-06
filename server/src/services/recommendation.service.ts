@@ -19,6 +19,9 @@ class RecommendationService {
     const { goal, diet } = data;
 
     const ranked = await this.runMLRecommendation(goal);
+    const scoreById = new Map(
+      ranked.map((item) => [item._id, item.similarityScore])
+    );
 
     const orderedIds = ranked.map((item) => item._id);
 
@@ -49,7 +52,12 @@ class RecommendationService {
       );
     }
 
-    return ordered.slice(0, RESULT_LIMIT);
+    return ordered.slice(0, RESULT_LIMIT).map((product) => ({
+      ...product.toObject(),
+      matchScore: Math.round(
+        (scoreById.get(product._id.toString()) ?? 0) * 100
+      ),
+    }));
   }
 
   private async runMLRecommendation(

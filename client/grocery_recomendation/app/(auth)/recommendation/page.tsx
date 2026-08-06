@@ -5,8 +5,9 @@ import Link from "next/link";
 import Header from "../_components/header";
 import Footer from "../_components/footer";
 import api from "@/lib/api/axios";
-import { 
-  Sparkles, 
+import { getProductImageUrl, DEFAULT_PRODUCT_IMAGE } from "@/lib/utils";
+import {
+  Sparkles,
   Activity, 
   User, 
   Target, 
@@ -20,6 +21,7 @@ import {
 interface Product {
   _id: string;
   name: string;
+  description: string;
   image: string;
   category: string;
   calories: number;
@@ -28,6 +30,10 @@ interface Product {
   fat: number;
   fiber: number;
   sugar: number;
+  nutritionDensityScore: number;
+  sodium: number;
+  cholesterol: number;
+  matchScore?: number;
 }
 
 export default function RecommendationPage() {
@@ -349,7 +355,7 @@ await loadProfile();
                   {/* Enhanced 3-Column Grid for smaller items */}
                   <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
                     {recommendations.map((product) => {
-                      const imageUrl = `http://localhost:5001/uploads/products/${product.image}`;
+                      const imageUrl = getProductImageUrl(product.image);
 
                       return (
                         <div
@@ -362,17 +368,35 @@ await loadProfile();
                               <img
                                 src={imageUrl}
                                 alt={product.name}
+                                onError={(e) => {
+                                  e.currentTarget.onerror = null;
+                                  e.currentTarget.src = DEFAULT_PRODUCT_IMAGE;
+                                }}
                                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                               />
                             </div>
 
-                            <span className="text-[9px] font-extrabold tracking-wider text-[#556b2f] uppercase bg-[#f4f7f4] px-2 py-0.5 rounded">
-                              {product.category || "Grocery Pack"}
-                            </span>
+                            <div className="flex items-center justify-between gap-2">
+                              <span className="text-[9px] font-extrabold tracking-wider text-[#556b2f] uppercase bg-[#f4f7f4] px-2 py-0.5 rounded">
+                                {product.category || "Grocery Pack"}
+                              </span>
+
+                              {typeof product.matchScore === "number" && (
+                                <span className="text-[9px] font-extrabold tracking-wider text-white bg-[#556b2f] px-2 py-0.5 rounded-full shrink-0">
+                                  {product.matchScore}% Match
+                                </span>
+                              )}
+                            </div>
 
                             <h3 className="text-sm font-extrabold text-stone-900 tracking-tight mt-2 line-clamp-1">
                               {product.name}
                             </h3>
+
+                            {product.description && (
+                              <p className="text-[11px] text-stone-500 font-medium leading-snug mt-1 line-clamp-2">
+                                {product.description}
+                              </p>
+                            )}
 
                             {/* Denser Micro Metrics Array Section */}
                             <div className="grid grid-cols-2 gap-x-2 gap-y-1 mt-2.5 bg-[#faf9f5] p-2 rounded-lg border border-stone-100 text-[11px] font-bold text-stone-600">
@@ -392,13 +416,21 @@ await loadProfile();
                                 <span className="text-stone-400 font-semibold">Fat</span>
                                 <span className="text-stone-800">{product.fat}g</span>
                               </div>
-                              <div className="flex justify-between">
+                              <div className="flex justify-between border-b border-stone-200/50 pb-1">
                                 <span className="text-stone-400 font-semibold">Fib</span>
                                 <span className="text-stone-800">{product.fiber}g</span>
                               </div>
-                              <div className="flex justify-between">
+                              <div className="flex justify-between border-b border-stone-200/50 pb-1">
                                 <span className="text-stone-400 font-semibold">Sug</span>
                                 <span className="text-stone-800">{product.sugar}g</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-stone-400 font-semibold">Sodium</span>
+                                <span className="text-stone-800">{product.sodium}mg</span>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-stone-400 font-semibold">Chol</span>
+                                <span className="text-stone-800">{product.cholesterol}mg</span>
                               </div>
                             </div>
                           </div>
