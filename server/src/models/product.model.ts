@@ -14,8 +14,21 @@ export interface IProduct extends Document {
   sugar: number;
 
   nutritionDensityScore: number;
+
   sodium: number;
   cholesterol: number;
+
+  calcium: number;
+  iron: number;
+  potassium: number;
+  magnesium: number;
+  zinc: number;
+
+  vitaminA: number;
+  vitaminC: number;
+  vitaminD: number;
+  vitaminE: number;
+  vitaminK: number;
 }
 
 const productSchema = new Schema<IProduct>(
@@ -29,6 +42,7 @@ const productSchema = new Schema<IProduct>(
     description: {
       type: String,
       required: true,
+      default: "",
     },
 
     category: {
@@ -82,6 +96,56 @@ const productSchema = new Schema<IProduct>(
     },
 
     cholesterol: {
+      type: Number,
+      required: true,
+    },
+
+    calcium: {
+      type: Number,
+      required: true,
+    },
+
+    iron: {
+      type: Number,
+      required: true,
+    },
+
+    potassium: {
+      type: Number,
+      required: true,
+    },
+
+    magnesium: {
+      type: Number,
+      required: true,
+    },
+
+    zinc: {
+      type: Number,
+      required: true,
+    },
+
+    vitaminA: {
+      type: Number,
+      required: true,
+    },
+
+    vitaminC: {
+      type: Number,
+      required: true,
+    },
+
+    vitaminD: {
+      type: Number,
+      required: true,
+    },
+
+    vitaminE: {
+      type: Number,
+      required: true,
+    },
+
+    vitaminK: {
       type: Number,
       required: true,
     },
