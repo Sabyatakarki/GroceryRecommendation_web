@@ -173,7 +173,13 @@ export default function ProfilePage() {
         throw new Error(result.message);
       }
 
-      localStorage.setItem("user", JSON.stringify(result.data));
+      // The backend returns the raw document (keyed by "_id"), but the
+      // rest of the app expects "id" - preserve it so the profile guard
+      // on next load/refresh doesn't treat this session as logged out.
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...result.data, id: result.data._id || result.data.id })
+      );
       alert("Profile updated successfully.");
       setSaving(false);
     } catch (err: any) {
