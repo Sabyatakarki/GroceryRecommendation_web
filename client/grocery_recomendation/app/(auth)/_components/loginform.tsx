@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { setAuthToken, setUserData } from "@/lib/cookies";
 import axios from "axios";
 import { Eye, EyeOff, AlertCircle, CheckCircle2 } from "lucide-react";
 
@@ -50,8 +49,8 @@ export default function LoginForm() {
 // Save token and user
 const { token, user } = response.data.data;
 
-await setAuthToken(token);
-await setUserData(user);
+localStorage.setItem("grocery_token", token);
+localStorage.setItem("user", JSON.stringify(user));
 
 // Inline Success State
 setUiStatus({
