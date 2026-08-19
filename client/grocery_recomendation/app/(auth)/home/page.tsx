@@ -68,7 +68,7 @@ export default function HomePage() {
 
         <main className="bg-[#FAF9F5]">
           
-          {/* Vibrant Hero Section */}
+        
           <section className="relative overflow-hidden bg-gradient-to-br from-[#FAF9F5] via-[#F4F8F0] to-[#EBF3E3] border-b border-[#e2eae0]">
             {/* Soft decorative background glow */}
             <div className="absolute top-0 right-0 -z-10 w-[40%] h-[60%] rounded-full bg-radial from-[#e2ece0]/60 to-transparent blur-3xl pointer-events-none" />
