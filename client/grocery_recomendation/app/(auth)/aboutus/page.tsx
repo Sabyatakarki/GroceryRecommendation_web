@@ -100,7 +100,6 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* Behind the System (Our Core Pillars) */}
           <section className="max-w-7xl mx-auto px-6 py-16">
             <div className="text-center mb-12">
               <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#556B2F] bg-[#EEF5E8] px-2.5 py-1 rounded">
@@ -149,7 +148,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* Interactive Story Timeline */}
+          
           <section className="max-w-5xl mx-auto px-6 py-16 border-t border-[#e2eae0]">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-extrabold text-stone-900 tracking-tight">How We Got Here</h2>
