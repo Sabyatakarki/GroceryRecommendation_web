@@ -34,9 +34,7 @@ df.rename(columns={
 
 print("Columns renamed!")
 
-# ==========================================
-# Generate Categories
-# ==========================================
+
 def get_category(food):
     food = str(food).lower()
 
@@ -122,23 +120,17 @@ df["category"] = df["name"].apply(get_category)
 
 print("Categories generated!")
 
-# ==========================================
-# Generate Description
-# ==========================================
+
 df["description"] = df["name"].apply(
     lambda x: f"{str(x).title()} is a nutritious food rich in essential nutrients."
 )
 
 print("Descriptions generated!")
 
-# ==========================================
-# Placeholder Image
-# ==========================================
+
 df["image"] = ""
 
-# ==========================================
-# Reorder Columns
-# ==========================================
+
 columns = [
     "name",
     "description",
@@ -173,9 +165,7 @@ columns = [
 available_columns = [col for col in columns if col in df.columns]
 df = df[available_columns]
 
-# ==========================================
-# Save Clean Dataset
-# ==========================================
+
 df.to_csv("dataset/cleaned_food_dataset.csv", index=False)
 
 print("\n======================================")
