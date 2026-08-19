@@ -89,7 +89,7 @@ setTimeout(() => {
               </p>
             </header>
 
-            {/* Dynamic In-UI Notification Banner */}
+            
             {uiStatus.type && (
               <div
                 className={`mb-5 flex items-start gap-3 rounded-xl p-4 text-sm font-medium border animate-in fade-in slide-in-from-top-2 duration-200 ${
@@ -205,7 +205,7 @@ setTimeout(() => {
             <p className="mt-8 text-center text-sm text-stone-500">
               Don't have an account?{' '}
               <Link href="/register" className="font-bold text-emerald-600 hover:text-emerald-700 hover:underline transition-colors">
-                Sign up
+                Create account now.
               </Link>
             </p>
 
