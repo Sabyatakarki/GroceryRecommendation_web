@@ -25,7 +25,7 @@ export default function Footer() {
           </p>
         </div>
 
-        {/* Column 2: Navigational Links */}
+     
         <div className="md:col-span-2 space-y-4">
           <h3 className="text-xs font-bold uppercase tracking-widest text-white">
             Navigation
