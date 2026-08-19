@@ -97,13 +97,7 @@ export default function Header() {
                   className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#FAF9F5] transition group/item"
                 >
                   <div className="flex items-center gap-3.5">
-                    <div className="w-12 h-12 rounded-lg overflow-hidden bg-stone-50 border border-stone-100 shrink-0">
-                      <img
-                        src={`http://localhost:5001/uploads/products/${product.image}`}
-                        alt={product.name}
-                        className="w-full h-full object-cover group-hover/item:scale-105 transition duration-300"
-                      />
-                    </div>
+                   
 
                     <div className="space-y-0.5">
                       <p className="text-sm font-extrabold text-stone-900 tracking-tight line-clamp-1 group-hover/item:text-[#556b2f] transition">
