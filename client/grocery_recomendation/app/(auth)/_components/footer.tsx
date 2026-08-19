@@ -5,13 +5,13 @@ export default function Footer() {
   return (
     <footer className="w-full bg-stone-900 text-stone-300 border-t border-stone-800/60 font-sans tracking-tight">
       
-      {/* Primary Brand & Information Grid */}
+    
       <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12">
 
-        {/* Column 1: Logo & Mission Statement */}
+        
         <div className="md:col-span-4 space-y-5">
           <Link href="/" className="flex items-center gap-3 group w-max">
-            {/* Logo box matches your exact deep olive green */}
+        
             <div className="bg-[#556b2f] w-10 h-10 rounded-xl flex items-center justify-center shadow-lg shadow-[#556b2f]/10">
               <Leaf className="text-white" size={20} />
             </div>
