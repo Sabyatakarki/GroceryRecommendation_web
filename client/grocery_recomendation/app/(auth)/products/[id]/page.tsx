@@ -201,10 +201,10 @@ export default function ProductDetailsPage() {
 
             </div>
 
-            {/* RIGHT COLUMN: Micronutrients + CTA Banner */}
+        
             <div className="space-y-6">
 
-              {/* Micronutrients Table */}
+             
               <div className="bg-white border border-stone-200/80 rounded-2xl p-6 shadow-sm space-y-4">
                 <h2 className="text-xs font-extrabold uppercase tracking-wider text-stone-900 border-b border-stone-100 pb-3">
                   Essential Vitamins & Minerals
