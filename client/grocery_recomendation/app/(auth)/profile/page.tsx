@@ -63,8 +63,7 @@ export default function ProfilePage() {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
 
     if (!user?.id) {
-      // Stale/incomplete session (e.g. token saved without user data) -
-      // clear it and force a clean re-login instead of crashing below.
+      
       localStorage.removeItem("grocery_token");
       localStorage.removeItem("user");
       router.push("/login");
