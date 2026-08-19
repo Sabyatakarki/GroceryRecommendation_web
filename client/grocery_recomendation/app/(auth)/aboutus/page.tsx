@@ -13,20 +13,15 @@ import {
   ArrowRight,
   TrendingUp,
   BrainCircuit,
-  Apple
+  Apple,
+  Search,
+  Sliders,
+  CheckCircle2,
+  ListFilter
 } from "lucide-react";
 
 export default function AboutPage() {
   const router = useRouter();
-
-  const handleCTA = () => {
-    const token = localStorage.getItem("grocery_token");
-    if (!token) {
-      router.push("/login");
-    } else {
-      router.push("/recommendation");
-    }
-  };
 
   return (
     <div className="min-h-screen bg-[#faf9f5] flex flex-col justify-between">
@@ -51,7 +46,7 @@ export default function AboutPage() {
                 </h1>
 
                 <p className="text-stone-600 text-base lg:text-lg font-medium leading-relaxed max-w-xl">
-                  We believe that eating healthy shouldn't require a biochemistry degree. Our platform translating complex clinical nutritional standards into straightforward, actionable grocery choices custom-tailored to your unique biology.
+                  We believe that eating healthy shouldn't require a biochemistry degree. Our platform translates complex clinical nutritional standards into straightforward, actionable grocery choices custom-tailored to your unique biology.
                 </p>
               </div>
 
@@ -148,7 +143,7 @@ export default function AboutPage() {
             </div>
           </section>
 
-          
+          {/* Timeline Section */}
           <section className="max-w-5xl mx-auto px-6 py-16 border-t border-[#e2eae0]">
             <div className="text-center mb-12">
               <h2 className="text-3xl font-extrabold text-stone-900 tracking-tight">How We Got Here</h2>
@@ -174,7 +169,6 @@ export default function AboutPage() {
                 }
               ].map((milestone, idx) => (
                 <div key={idx} className={`relative flex flex-col sm:flex-row items-start ${idx % 2 === 0 ? "sm:flex-row-reverse" : ""} justify-between`}>
-                  {/* Timeline dot */}
                   <div className="absolute left-4 sm:left-1/2 transform -translate-x-[7px] w-4.5 h-4.5 bg-[#556B2F] border-4 border-white rounded-full z-10" />
                   
                   <div className="w-full sm:w-[45%] pl-10 sm:pl-0">
@@ -196,31 +190,89 @@ export default function AboutPage() {
             </div>
           </section>
 
-          {/* Premium Vision Action Banner (CTA) */}
-          <section className="max-w-7xl mx-auto px-6 py-20 border-t border-[#e2eae0]">
-            <div className="bg-gradient-to-br from-[#556B2F] to-[#445625] rounded-[32px] p-10 lg:p-16 text-center space-y-6 text-white relative overflow-hidden shadow-md">
-              {/* Abstract soft glow backdrop */}
-              <div className="absolute -top-10 -right-10 w-44 h-44 rounded-full bg-white/5 blur-2xl" />
-              <div className="absolute -bottom-10 -left-10 w-44 h-44 rounded-full bg-black/10 blur-2xl" />
-
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/10 rounded-full text-[10px] font-extrabold uppercase tracking-widest text-[#EEF5E8]">
-                <Sparkles size={11} /> Start Nourishing Smarter
+          {/* NEW SECTION 1: Interactive Platform Feature Showcase */}
+          <section className="max-w-7xl mx-auto px-6 py-16 border-t border-[#e2eae0]">
+            <div className="text-center mb-12">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-[#556B2F] bg-[#EEF5E8] px-2.5 py-1 rounded">
+                Platform Intelligence
               </span>
-
-              <h2 className="text-3xl lg:text-5xl font-black tracking-tight max-w-xl mx-auto leading-tight">
-                Ready to Upgrade Your Daily Grocery Choices?
+              <h2 className="text-3xl font-extrabold text-stone-900 tracking-tight mt-3">
+                How Our System Works For You
               </h2>
-
-              <p className="text-stone-200/90 font-medium text-sm lg:text-base max-w-lg mx-auto">
-                Join thousands of individuals using calculated physiological targets to fuel longevity.
+              <p className="text-stone-500 font-medium text-sm mt-1 max-w-md mx-auto">
+                Explore the core capabilities integrated into your daily shopping workflow.
               </p>
+            </div>
 
-              <div className="pt-4">
+            <div className="grid md:grid-cols-3 gap-6">
+              {[
+                {
+                  icon: <Search className="text-[#556B2F]" size={22} />,
+                  title: "Smart Catalog Search",
+                  desc: "Instantly parse food items with real-time macronutrient indexing and density scoring.",
+                  action: () => router.push("/products"),
+                  btnText: "Explore Catalog"
+                },
+                {
+                  icon: <Sliders className="text-[#556B2F]" size={22} />,
+                  title: "Dynamic Recommendations",
+                  desc: "Calculate meal compatibility and receive smart ingredient substitutions on demand.",
+                  action: () => router.push("/recommendation"),
+                  btnText: "View Recommendations"
+                },
+                {
+                  icon: <ListFilter className="text-[#556B2F]" size={22} />,
+                  title: "Allergen Guard",
+                  desc: "Automatically filter out sensitive ingredients based on strict dietary restrictions.",
+                  action: () => router.push("/products"),
+                  btnText: "Learn More"
+                }
+              ].map((card, idx) => (
+                <div key={idx} className="bg-white border border-[#e2eae0] rounded-[24px] p-6 flex flex-col justify-between hover:shadow-md transition">
+                  <div className="space-y-4">
+                    <div className="p-3 bg-[#EEF5E8] text-[#556B2F] w-fit rounded-xl">
+                      {card.icon}
+                    </div>
+                    <h3 className="text-lg font-bold text-stone-900">{card.title}</h3>
+                    <p className="text-stone-500 font-medium text-xs leading-relaxed">{card.desc}</p>
+                  </div>
+
+                  <div className="pt-6">
+                    <button 
+                      onClick={card.action}
+                      className="inline-flex items-center gap-1.5 text-xs font-extrabold text-[#556B2F] hover:text-[#445625] transition"
+                    >
+                      <span>{card.btnText}</span>
+                      <ArrowRight size={14} />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {/* NEW SECTION 2: Smart Grocery Assistant Callout Banner */}
+          <section className="max-w-7xl mx-auto px-6 py-16 border-t border-[#e2eae0]">
+            <div className="bg-stone-900 text-white rounded-[32px] p-8 lg:p-12 flex flex-col lg:flex-row items-center justify-between gap-8 shadow-sm">
+              <div className="space-y-3 max-w-xl">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-stone-800 rounded-full text-[10px] font-extrabold uppercase tracking-widest text-[#EEF5E8] border border-stone-700">
+                  <Apple size={12} className="text-[#556B2F]" /> Standardized Food Intelligence
+                </span>
+                <h3 className="text-2xl lg:text-3xl font-extrabold tracking-tight">
+                  Explore Healthy Grocery Options Now
+                </h3>
+                <p className="text-stone-400 text-xs lg:text-sm font-medium leading-relaxed">
+                  Browse our catalog of verified food items, macro breakdowns, and health density scores to curate your next cart with confidence.
+                </p>
+              </div>
+
+              <div className="shrink-0 flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                 <button
-                  onClick={handleCTA}
-                  className="bg-[#faf9f5] hover:bg-[#FAF9F5]/90 text-[#556B2F] px-8 py-3.5 rounded-xl font-extrabold text-xs uppercase tracking-wider transition shadow-sm hover:shadow active:scale-[0.99] inline-flex items-center gap-2"
+                  onClick={() => router.push("/products")}
+                  className="bg-[#556B2F] hover:bg-[#455726] text-white px-6 py-3 rounded-xl font-extrabold text-xs uppercase tracking-wider transition shadow-sm inline-flex items-center justify-center gap-2"
                 >
-                  Configure My Profile <ArrowRight size={14} />
+                  <span>Browse Products</span>
+                  <ArrowRight size={14} />
                 </button>
               </div>
             </div>
