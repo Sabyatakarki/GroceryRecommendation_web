@@ -68,7 +68,6 @@ export default function HomePage() {
 
         <main className="bg-[#FAF9F5]">
           
-        
           <section className="relative overflow-hidden bg-gradient-to-br from-[#FAF9F5] via-[#F4F8F0] to-[#EBF3E3] border-b border-[#e2eae0]">
             {/* Soft decorative background glow */}
             <div className="absolute top-0 right-0 -z-10 w-[40%] h-[60%] rounded-full bg-radial from-[#e2ece0]/60 to-transparent blur-3xl pointer-events-none" />
@@ -118,7 +117,7 @@ export default function HomePage() {
             </div>
           </section>
 
-          {/* Featured Products (Refined to be beautifully compact) */}
+          {/* Featured Products */}
           <section className="max-w-7xl mx-auto px-6 py-20">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-10 gap-4">
               <div>
@@ -149,34 +148,23 @@ export default function HomePage() {
             ) : (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {products.map((product) => {
-                  const imageUrl = `http://localhost:5001/uploads/products/${product.image}`;
-
                   return (
                     <div
                       key={product._id}
                       onClick={() => requireLogin(`/products/${product._id}`)}
-                      className="bg-white border border-[#e2eae0] rounded-[20px] p-3.5 flex flex-col justify-between shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
+                      className="bg-white border border-[#e2eae0] rounded-[20px] p-4 flex flex-col justify-between shadow-xs hover:shadow-md hover:-translate-y-1 transition-all duration-300 group cursor-pointer"
                     >
                       <div>
-                        {/* Compact Image Frame */}
-                        <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl bg-stone-50 border border-stone-100 mb-3">
-                          <img
-                            src={imageUrl}
-                            alt={product.name}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                        </div>
-
                         <span className="text-[9px] font-extrabold tracking-wider text-[#556b2f] uppercase bg-[#f4f7f4] px-2 py-0.5 rounded-sm">
                           {product.category || "Grocery Item"}
                         </span>
 
-                        <h3 className="text-sm lg:text-base font-extrabold text-stone-900 tracking-tight mt-1.5 line-clamp-1">
+                        <h3 className="text-sm lg:text-base font-extrabold text-stone-900 tracking-tight mt-2 line-clamp-1">
                           {product.name}
                         </h3>
 
                         {/* Compact Micro Nutrition Grid */}
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-2.5 bg-[#faf9f5] p-2.5 rounded-lg border border-stone-100 text-[11px] font-bold text-stone-600">
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 mt-3 bg-[#faf9f5] p-3 rounded-lg border border-stone-100 text-[11px] font-bold text-stone-600">
                           <div className="flex justify-between border-b border-stone-200/40 pb-0.5">
                             <span className="text-stone-400 font-semibold">Calories</span>
                             <span className="text-stone-800">{product.calories}kcal</span>
@@ -202,7 +190,7 @@ export default function HomePage() {
                           e.stopPropagation();
                           requireLogin(`/products/${product._id}`);
                         }}
-                        className="mt-3.5 w-full inline-flex items-center justify-center gap-1.5 bg-[#556b2f] hover:bg-[#465a27] text-white text-[11px] font-extrabold uppercase tracking-wider py-2.5 rounded-lg transition duration-200 shadow-xs"
+                        className="mt-4 w-full inline-flex items-center justify-center gap-1.5 bg-[#556b2f] hover:bg-[#465a27] text-white text-[11px] font-extrabold uppercase tracking-wider py-2.5 rounded-lg transition duration-200 shadow-xs"
                       >
                         <Eye size={12} /> View Details
                       </button>
